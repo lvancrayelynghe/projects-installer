@@ -1,0 +1,9 @@
+---
+
+- name: Create Deskfiles
+  template:
+    src: "{{ item.desk.template | default('default') }}"
+    dest: "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}.sh"
+    # dest: "/etc/desk/sites-available/{{ item.repo | basename | regex_replace('.git$', '') }}.conf"
+  with_items: projects | selectattr("state", "defined") | byattr("state", "present") | selectattr("desk", "defined") | list
+  when: item.desk.install is defined and item.desk.install == true

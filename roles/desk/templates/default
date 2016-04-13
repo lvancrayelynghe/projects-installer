@@ -1,0 +1,5 @@
+# Description: {{ item.name }}
+
+PROJECT_PATH="{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}"
+
+source ~/.desk/base-project.sh $PROJECT_PATH
