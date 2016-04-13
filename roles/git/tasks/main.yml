@@ -7,6 +7,7 @@
     accept_hostkey: true
   ignore_errors: yes
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | list
+  when: item.repo != false
 
 - name: Remove disabled projects repositories
   file:

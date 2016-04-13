@@ -12,7 +12,6 @@ global:
     path: "/etc/nginx/vhosts"
     hostname: "[[project]].dev"
 projects:
-  # Minimal requirement for a project is a repository
   - repo:  "git@github.com:vendor/project-minimal.git"
 
   - name:  "Name of the first project"
