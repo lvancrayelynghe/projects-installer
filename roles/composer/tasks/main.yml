@@ -2,7 +2,7 @@
 
 - name: Install packages
   composer:
-    working_dir: "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}"
+    working_dir: "{{ item.path }}"
     command: "install"
-  with_items: projects | selectattr("state", "defined") | byattr("state", "present") | selectattr("composer", "defined") | list
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("composer", "defined") | list
   when: item.composer.install is defined and item.composer.install == true

@@ -1,10 +1,10 @@
 <VirtualHost *:80>
 
-    ServerName {{ item.repo | basename | regex_replace('.git$', '') }}.dev
+    ServerName {{ item.project }}.dev
 
-    DocumentRoot "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }}"
+    DocumentRoot "{{ item.path }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }}"
 
-    <Directory {{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }}>
+    <Directory {{ item.path }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }}>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted

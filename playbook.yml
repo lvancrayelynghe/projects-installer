@@ -4,12 +4,13 @@
   vars_files:
     - "{{ config_file | mandatory }}"
   roles:
-    # - git
-    # - desk
-    # - composer
-    # - npm
+    - setfacts
+    - git
+    - desk
+    - composer
+    - npm
+    - mysql
     # - nginx
-    # - mysql
     # - laravel
     # - lumen
     # - prestashop

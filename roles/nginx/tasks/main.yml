@@ -3,9 +3,9 @@
 - name: Create virtualhost
   template:
     src: "{{ item.nginx.template | default('default') }}"
-    dest: "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}.dev.conf"
-    # dest: "/etc/nginx/sites-available/{{ item.repo | basename | regex_replace('.git$', '') }}.conf"
-  with_items: projects | selectattr("state", "defined") | byattr("state", "present") | selectattr("nginx", "defined") | list
+    dest: "{{ item.path }}.dev.conf"
+    # dest: "/etc/nginx/sites-available/{{ item.project }}.conf"
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("nginx", "defined") | list
   when: item.nginx.install is defined and item.nginx.install == true
   register: create_virtualhost
   become: true

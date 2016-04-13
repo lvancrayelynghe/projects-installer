@@ -1,19 +1,20 @@
 ---
 
-path: "/path/to/projects"
-mysql:
-  user: "root"
-  password: "root"
-  database: "[[project]]"
-npm:
-  options: "--no-bin-links"
-nginx:
-  path: "/etc/nginx/vhosts"
-  hostname: "[[project]].dev"
+global:
+  path: "/path/to/projects"
+  mysql:
+    user: "root"
+    password: "root"
+    database: "[[project]]"
+  npm:
+    options: "--no-bin-links"
+  nginx:
+    path: "/etc/nginx/vhosts"
+    hostname: "[[project]].dev"
 projects:
   - name:  "Name of the first project"
     repo:  "git@github.com:vendor/project1.git"
-    path:  "{{path}}/subdirectory"
+    path:  "{{global.path}}/subdirectory/[[project]]"
     state: "present"
     nginx: { install: true, root: "public" }
     desk:  { install: true }
