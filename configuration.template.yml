@@ -17,9 +17,11 @@ projects:
     state: "present"
     nginx: { install: true, root: "public" }
     desk:  { install: true }
+
   - name:  "Name of the 2nd project"
     repo:  "git@github.com:vendor/project2.git"
     state: "absent"
+
   - name:       "Name of the third project"
     repo:       "git@github.com:vendor/project3.git"
     state:      "present"
