@@ -6,3 +6,9 @@
     dest: "~/.desk/desks/{{ item.repo | basename | regex_replace('.git$', '') }}.sh"
   with_items: projects | selectattr("state", "defined") | byattr("state", "present") | selectattr("desk", "defined") | list
   when: item.desk.install is defined and item.desk.install == true
+
+- name: Remove Deskfiles
+  file:
+    path: "~/.desk/desks/{{ item.repo | basename | regex_replace('.git$', '') }}.sh"
+    state: absent
+  with_items: projects | selectattr("desk", "undefined") | list
