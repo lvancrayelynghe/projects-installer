@@ -1,0 +1,34 @@
+---
+
+path: "/path/to/projects"
+mysql:
+  user: "root"
+  password: "root"
+  database: "[[project]]"
+npm:
+  options: "--no-bin-links"
+nginx:
+  path: "/etc/nginx/vhosts"
+  hostname: "[[project]].dev"
+projects:
+  - name:  "Name of the first project"
+    repo:  "git@github.com:vendor/project1.git"
+    path:  "{{path}}/subdirectory"
+    state: "present"
+    nginx: { install: true, root: "public" }
+    desk:  { install: true }
+  - name:  "Name of the 2nd project"
+    repo:  "git@github.com:vendor/project2.git"
+    state: "absent"
+  - name:       "Name of the third project"
+    repo:       "git@github.com:vendor/project3.git"
+    state:      "present"
+    desk:       { install: true, template: "web" }
+    composer:   { install: true }
+    npm:        { install: true }
+    nginx:      { install: true, template: "prestashop16" }
+    mysql:      { install: true, import: "sql/dump.sql", queries: ["UPADTE table SET domain=\"[[hostname]]\""] }
+    laravel:    { env: true, key: true, migrate: true, seed: true }
+    lumen:      { env: true, key: true, migrate: true, seed: true }
+    prestashop: { config: true }
+    wordpress:  { config: true }
