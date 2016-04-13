@@ -8,6 +8,7 @@
 - [ ] See https://github.com/laravel/homestead/blob/master/scripts/serve-symfony2.sh
 - [ ] php-fpm version
 - [ ] hostname var
+- [ ] hostname in /etc/hosts
 - [ ] configuration templates
 - [ ] config file deletion
 
