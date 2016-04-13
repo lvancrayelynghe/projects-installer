@@ -1,0 +1,16 @@
+---
+
+- hosts: localhost
+  vars_files:
+    - "{{ config_file | mandatory }}"
+  roles:
+    # - git
+    # - desk
+    # - composer
+    # - npm
+    # - nginx
+    # - mysql
+    # - laravel
+    # - lumen
+    # - prestashop
+    # - wordpress
