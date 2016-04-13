@@ -1,0 +1,14 @@
+---
+
+- name: Clone repositories
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}"
+    accept_hostkey: true
+  with_items: projects | selectattr("state", "defined") | byattr("state", "present") | list
+
+- name: Remove disabled projects repositories
+  file:
+    path: "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}"
+    state: absent
+  with_items: projects | selectattr("state", "defined") | byattr("state", "absent") | list
