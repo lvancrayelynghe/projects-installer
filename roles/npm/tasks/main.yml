@@ -1,0 +1,8 @@
+---
+
+- name: Install packages
+  command: "npm install {{ npm.options | default('') }}"
+  args:
+    chdir: "{{ item.path | default(path) }}/{{ item.repo | basename | regex_replace('.git$', '') }}"
+  with_items: projects | selectattr("state", "defined") | byattr("state", "present") | selectattr("npm", "defined") | list
+  when: item.npm.install is defined and item.npm.install == true
