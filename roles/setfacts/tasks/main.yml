@@ -2,7 +2,7 @@
 
 - name: Define default values
   set_fact:
-    repo:       "{{ item.repo }}"
+    repo:       "{{ item.repo | mandatory }}"
     name:       "{{ item.name | default(item.repo | basename | regex_replace('.git$', '')) }}"
     project:    "{{ item.repo | basename | regex_replace('.git$', '') }}"
     path:       "{{ item.path | default(global.path + '/' + item.repo | basename | regex_replace('.git$', '')) | regex_replace('\\[\\[project\\]\\]', item.repo | basename | regex_replace('.git$', '')) }}"

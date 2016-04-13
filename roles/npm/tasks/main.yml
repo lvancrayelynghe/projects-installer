@@ -5,4 +5,4 @@
   args:
     chdir: "{{ item.path }}"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("npm", "defined") | list
-  when: item.npm.install is defined and item.npm.install == true
+  when: item.npm != false

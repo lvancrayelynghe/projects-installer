@@ -6,7 +6,7 @@
     dest: "{{ item.path }}.dev.conf"
     # dest: "/etc/nginx/sites-available/{{ item.project }}.conf"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("nginx", "defined") | list
-  when: item.nginx.install is defined and item.nginx.install == true
+  when: item.nginx != false
   register: create_virtualhost
   become: true
 

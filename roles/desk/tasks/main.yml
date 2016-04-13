@@ -5,7 +5,7 @@
     src: "{{ item.desk.template | default('default') }}"
     dest: "~/.desk/desks/{{ item.project }}.sh"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("desk", "defined") | list
-  when: item.desk.install is defined and item.desk.install == true
+  when: item.desk != false
 
 - name: Remove and clean Deskfiles
   file:
