@@ -33,9 +33,9 @@
 ### MySQL
 
 - [ ] See https://github.com/laravel/homestead/blob/master/scripts/create-mysql.sh
-- [ ] database creation
-- [ ] database deletion
-- [ ] import
+- [x] database creation
+- [x] database deletion
+- [x] import
 - [ ] queries
 
 

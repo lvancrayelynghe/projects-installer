@@ -1,0 +1,23 @@
+---
+
+- name: Create databases
+  mysql_db:
+    name: "{{ item.repo | basename | regex_replace('.git$', '') }}"
+    state: present
+  with_items: projects | selectattr("state", "defined") | byattr("state", "present") | selectattr("mysql", "defined") | list
+  when: item.mysql.install is defined and item.mysql.install == true
+  register: database_created
+
+- name: Import dumps
+  mysql_db:
+    name: "{{ item.item.repo | basename | regex_replace('.git$', '') }}"
+    state: import
+    target: "{{ item.item.mysql.import }}"
+  with_items: database_created.results | byattr("changed", true)
+  when: database_created.changed and item.item.mysql.import is defined
+
+- name: Remove and clean databases
+  mysql_db:
+    name: "{{ item.repo | basename | regex_replace('.git$', '') }}"
+    state: absent
+  with_items: projects | selectattr("state", "defined") | byattr("state", "absent") | list | union(projects | selectattr("mysql", "undefined") | list)
