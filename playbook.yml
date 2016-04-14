@@ -10,7 +10,7 @@
     - composer
     - npm
     - mysql
-    # - nginx
+    - nginx
     # - laravel
     # - lumen
     # - prestashop
