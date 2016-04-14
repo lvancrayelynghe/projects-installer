@@ -12,7 +12,7 @@
     - mysql
     - nginx
     - fuelphp
-    # - laravel
+    - laravel
     # - lumen
     # - prestashop
     # - wordpress
