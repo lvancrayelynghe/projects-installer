@@ -12,6 +12,7 @@
     npm:        "{{ item.npm | default(false) }}"
     nginx:      "{{ item.nginx | default(false) }}"
     mysql:      "{{ item.mysql | default(false) }}"
+    fuelphp:    "{{ item.fuelphp | default(false) }}"
     laravel:    "{{ item.laravel | default(false) }}"
     lumen:      "{{ item.lumen | default(false) }}"
     prestashop: "{{ item.prestashop | default(false) }}"

@@ -11,6 +11,7 @@
     - npm
     - mysql
     - nginx
+    - fuelphp
     # - laravel
     # - lumen
     # - prestashop
