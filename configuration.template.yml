@@ -11,6 +11,7 @@ global:
   nginx:
     path: "/etc/nginx/vhosts"
     hostname: "[[project]].dev"
+    fastcgi: "/var/run/php5-fpm.sock"
 projects:
   - repo:  "git@github.com:vendor/project-minimal.git"
 

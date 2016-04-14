@@ -3,7 +3,7 @@
 - name: Create virtualhosts
   template:
     src: "{{ item.nginx.template | default('default') }}"
-    dest: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}"
+    dest: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}.conf"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("nginx", false) | list
   when: item.nginx != false
   register: create_virtualhost
@@ -11,10 +11,19 @@
 
 - name: Remove disabled projects virtualhosts
   file:
-    path: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}"
+    path: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}.conf"
     state: absent
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
   register: remove_virtualhost
+
+- name: Handle hosts in system hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}$"
+    line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}"
+    state: "{{ (item.nginx != false) | ternary('present', 'absent') }}"
+  with_items: items.results | map(attribute='ansible_facts') | list
+  become: true
 
 - name: Restart nginx
   service:
@@ -32,6 +41,7 @@
     - php5-fpm
     - php5.6-fpm
     - php7.0-fpm
+  become: true
 
 - name: Restart phpX-fpm
   service:
