@@ -13,5 +13,5 @@
     - nginx
     - fuelphp
     - laravel
-    # - prestashop
+    - prestashop
     # - wordpress
