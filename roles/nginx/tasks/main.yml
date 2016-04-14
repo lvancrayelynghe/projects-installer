@@ -15,6 +15,7 @@
     state: absent
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
   register: remove_virtualhost
+  become: true
 
 - name: Handle hosts in system hosts file
   lineinfile:
