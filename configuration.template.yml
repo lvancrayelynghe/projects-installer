@@ -32,8 +32,8 @@ projects:
     composer:   true
     npm:        true
     nginx:      { template: "prestashop16" }
-    mysql:      { import: "sql/dump.sql", queries: ["UPADTE table SET domain=\"[[hostname]]\""] }
-    laravel:    { env: true, key: true, migrate: true, seed: true }
-    lumen:      { env: true, key: true, migrate: true, seed: true }
-    prestashop: true
+    mysql:      { import: "sql/dump.sql" }
+    laravel:    { key: true, migrate: true, seed: true }
+    lumen:      { key: true, migrate: true, seed: true }
+    prestashop: { configurl: true, shopurl: true }
     wordpress:  true
