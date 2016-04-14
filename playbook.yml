@@ -13,6 +13,5 @@
     - nginx
     - fuelphp
     - laravel
-    # - lumen
     # - prestashop
     # - wordpress
