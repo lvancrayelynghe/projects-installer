@@ -23,14 +23,20 @@
   when: create_virtualhost.changed or remove_virtualhost.changed
   become: true
 
-- name: Check if service php5-fpm exists
-  stat: path=/etc/init.d/php5-fpm
+- name: Check if service phpX-fpm exists
+  stat:
+    path: "/etc/init.d/{{ item }}"
   register: service_status
   when: create_virtualhost.changed or remove_virtualhost.changed
+  with_items:
+    - php5-fpm
+    - php5.6-fpm
+    - php7.0-fpm
 
-- name: Restart php5-fpm
+- name: Restart phpX-fpm
   service:
-    name: nginx
+    name: "{{ item.item }}"
     state: restarted
-  when: (create_virtualhost.changed or remove_virtualhost.changed) and service_status.stat.exists
+  with_items: service_status.results
+  when: (create_virtualhost.changed or remove_virtualhost.changed) and item.stat.exists
   become: true
