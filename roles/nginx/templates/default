@@ -1,13 +1,34 @@
-<VirtualHost *:80>
+server {
+    listen 80;
+    server_name {{ item.project }}.dev;
+    root {{ item.path }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }};
 
-    ServerName {{ item.project }}.dev
+    index index.html index.htm index.php;
 
-    DocumentRoot "{{ item.path }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }}"
+    charset utf-8;
 
-    <Directory {{ item.path }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }}>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
 
-</VirtualHost>
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    access_log off;
+    error_log  /var/log/nginx/{{ item.project }}.dev-error.log error;
+
+    error_page 404 /index.php;
+
+    sendfile off;
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
