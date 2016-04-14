@@ -5,7 +5,7 @@
     src: "{{ item.nginx.template | default('default') }}"
     dest: "{{ item.path }}.dev.conf"
     # dest: "/etc/nginx/sites-available/{{ item.project }}.conf"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("nginx", "defined") | list
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("nginx", false) | list
   when: item.nginx != false
   register: create_virtualhost
   become: true

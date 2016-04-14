@@ -4,7 +4,7 @@
   template:
     src: "{{ item.desk.template | default('default') }}"
     dest: "~/.desk/desks/{{ item.project }}.sh"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("desk", "defined") | list
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("desk", false) | list
   when: item.desk != false
 
 - name: Remove and clean Deskfiles

@@ -4,7 +4,7 @@
   mysql_db:
     name: "{{ item.mysql.database | default(item.project) }}"
     state: present
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("mysql", "defined") | list
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("mysql", false) | list
   when: item.mysql != false
   register: database_created
 

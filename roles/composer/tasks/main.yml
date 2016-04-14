@@ -4,5 +4,5 @@
   composer:
     working_dir: "{{ item.path }}"
     command: "install"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | selectattr("composer", "defined") | list
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("npm", false) | list
   when: item.composer != false
