@@ -12,7 +12,7 @@
   mysql_db:
     name: "{{ item.item.mysql.database | default(item.item.project) }}"
     state: import
-    target: "{{ item.item.mysql.import }}"
+    target: "{{ item.item.mysql.import | regex_replace('\\[\\[path\\]\\]', item.item.path) | regex_replace('\\[\\[project\\]\\]', item.item.project) }}"
   with_items: database_created.results | byattr("changed", true)
   when: database_created.changed and item.item.mysql.import is defined
 
