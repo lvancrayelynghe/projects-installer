@@ -17,13 +17,23 @@
   register: remove_virtualhost
   become: true
 
-- name: Handle hosts in system hosts file
+- name: Add projects in system hosts file
   lineinfile:
     dest: /etc/hosts
     regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}$"
     line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}"
-    state: "{{ (item.nginx != false) | ternary('present', 'absent') }}"
-  with_items: items.results | map(attribute='ansible_facts') | list
+    state: present
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | list
+  when: item.nginx != false
+  become: true
+
+- name: Remove disabled projects from system hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}$"
+    line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}"
+    state: absent
+  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
   become: true
 
 - name: Restart nginx
