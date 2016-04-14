@@ -7,10 +7,15 @@
 - [ ] See https://github.com/laravel/homestead/blob/master/scripts/serve-laravel.sh
 - [ ] See https://github.com/laravel/homestead/blob/master/scripts/serve-symfony2.sh
 - [ ] php-fpm version
-- [ ] hostname var
+- [x] hostname var
 - [ ] hostname in /etc/hosts
-- [ ] configuration templates
-- [ ] config file deletion
+- [x] configuration templates
+- [x] config file deletion
+
+
+### FuelPHP
+
+- [ ] update config file
 
 
 ### Laravel
@@ -45,11 +50,11 @@
 - [ ] tests
 
 
-### Prestashop
+### Wordpress
 
 - [ ] update config file
 
 
-### Wordpress
+### Prestashop
 
 - [ ] update config file
