@@ -1,7 +1,13 @@
 #!/bin/bash
 
 PROJECTS=$1
-COMMAND="ansible-playbook playbook.yml -e"
+ASK=$2
+
+if [ -z "$ASK" ]; then
+    COMMAND="ansible-playbook playbook.yml -e"
+else
+    COMMAND="ansible-playbook playbook.yml --ask-become-pass -e"
+fi
 
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

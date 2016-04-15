@@ -12,5 +12,9 @@
     - desk
     - composer
     # - npm
-    # - mysql
-    # - nginx
+    - mysql
+    - nginx
+    # - fuelphp
+    # - laravel
+    # - prestashop
+    # - wordpress

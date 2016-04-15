@@ -3,7 +3,7 @@
 # Global variables
 ### project: undefined but mandatory
 ### name: undefined
-root: "/home/vagrant/shared"
+root: "/home/benoth/projects"
 path: "{{ root }}/{{ project }}"
 
 # Project present or not
@@ -28,12 +28,14 @@ mysql_database: "{{ project }}"
 mysql_host:     "localhost"
 mysql_username: "root"
 mysql_password: "secret"
-mysql_dumps:    []
+mysql_imports:  []
 mysql_queries:  []
 
 # Handle nginx virtualhosts
-nginx:         false
-nginx_host:    "[[project]].dev"
-nginx_path:    "/etc/nginx/conf.d"
-nginx_fastcgi: "/var/run/php/php5.6-fpm.sock"
-nginx_file:    "{{ nginx_host }}.conf"
+nginx:          false
+nginx_root:     null
+nginx_host:     "{{ project }}.dev"
+nginx_path:     "/etc/nginx/conf.d"
+nginx_conf:     "{{ nginx_path }}/{{ nginx_host }}.conf"
+nginx_fastcgi:  "/var/run/php/php5.6-fpm.sock"
+nginx_template: "default"
