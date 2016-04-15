@@ -8,7 +8,7 @@
     - "{{ projects_path | mandatory }}/{{ project | mandatory }}.yml"
   roles:
     - prepare-values
-    - git
+    # - git
     # - desk
     # - composer
     # - npm

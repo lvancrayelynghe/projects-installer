@@ -2,61 +2,61 @@
 
 - name: Create .env file
   copy:
-    src: "{{ {{ item.path }}path }}/.env.example"
-    dest: "{{ {{ item.path }}path }}/.env"
+    src: "{{ {{ path }}path }}/.env.example"
+    dest: "{{ {{ path }}path }}/.env"
     force: no
   register: create_env_file
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | list
-  when: {{ item.path }}laravel != false
+  when: {{ path }}laravel != false
 
 - name: Generate a new key
   command: php artisan key:generate
   args:
-    chdir: "{{ {{ item.path }}{{ item.path }}path }}"
+    chdir: "{{ {{ path }}{{ path }}path }}"
   with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ item.path }}{{ item.path }}laravel.key is defined and {{ item.path }}{{ item.path }}laravel.key == true
+  when: create_env_file.changed and {{ path }}{{ path }}laravel.key is defined and {{ path }}{{ path }}laravel.key == true
 
 - name: Configure database name
   lineinfile:
-    dest: "{{ {{ item.path }}path }}/.env"
+    dest: "{{ {{ path }}path }}/.env"
     regexp: "^DB_DATABASE="
-    line: "DB_DATABASE={{ {{ item.path }}mysql.database | default({{ item.path }}project) }}"
+    line: "DB_DATABASE={{ {{ path }}mysql.database | default({{ path }}project) }}"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | notbyattr("mysql", false) | list
-  when: {{ item.path }}laravel != false and {{ item.path }}mysql != false
+  when: {{ path }}laravel != false and {{ path }}mysql != false
 
 - name: Configure database username
   lineinfile:
-    dest: "{{ {{ item.path }}path }}/.env"
+    dest: "{{ {{ path }}path }}/.env"
     regexp: "^DB_USERNAME="
     line: "DB_USERNAME={{ global.mysql.user | default('root') }}"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | notbyattr("mysql", false) | list
-  when: {{ item.path }}laravel != false and {{ item.path }}mysql != false
+  when: {{ path }}laravel != false and {{ path }}mysql != false
 
 - name: Configure database password
   lineinfile:
-    dest: "{{ {{ item.path }}path }}/.env"
+    dest: "{{ {{ path }}path }}/.env"
     regexp: "^DB_PASSWORD="
     line: "DB_PASSWORD={{ global.mysql.password | default('') }}"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | notbyattr("mysql", false) | list
-  when: {{ item.path }}laravel != false and {{ item.path }}mysql != false
+  when: {{ path }}laravel != false and {{ path }}mysql != false
 
 - name: Generate a new application key
   command: php artisan key:generate
   args:
-    chdir: "{{ {{ item.path }}{{ item.path }}path }}"
+    chdir: "{{ {{ path }}{{ path }}path }}"
   with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ item.path }}{{ item.path }}laravel.key is defined and {{ item.path }}{{ item.path }}laravel.key == true
+  when: create_env_file.changed and {{ path }}{{ path }}laravel.key is defined and {{ path }}{{ path }}laravel.key == true
 
 - name: Migrate database
   command: "php artisan migrate"
   args:
-    chdir: "{{ {{ item.path }}{{ item.path }}path }}"
+    chdir: "{{ {{ path }}{{ path }}path }}"
   with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ item.path }}{{ item.path }}laravel.migrate is defined and {{ item.path }}{{ item.path }}laravel.migrate == true
+  when: create_env_file.changed and {{ path }}{{ path }}laravel.migrate is defined and {{ path }}{{ path }}laravel.migrate == true
 
 - name: Seed database
   command: "php artisan db:seed"
   args:
-    chdir: "{{ {{ item.path }}{{ item.path }}path }}"
+    chdir: "{{ {{ path }}{{ path }}path }}"
   with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ item.path }}{{ item.path }}laravel.migrate is defined and {{ item.path }}{{ item.path }}laravel.migrate == true and {{ item.path }}{{ item.path }}laravel.seed is defined and {{ item.path }}{{ item.path }}laravel.seed == true
+  when: create_env_file.changed and {{ path }}{{ path }}laravel.migrate is defined and {{ path }}{{ path }}laravel.migrate == true and {{ path }}{{ path }}laravel.seed is defined and {{ path }}{{ path }}laravel.seed == true

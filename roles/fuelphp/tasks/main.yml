@@ -2,32 +2,32 @@
 
 - name: Configure base url
   replace:
-    dest: "{{ {{ item.path }}path }}/fuel/app/config/development/config.php"
+    dest: "{{ {{ path }}path }}/fuel/app/config/development/config.php"
     regexp: "(.*)'base_url'(.*)"
     replace: "    'base_url' => null,"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: {{ item.path }}fuelphp != false
+  when: {{ path }}fuelphp != false
 
 - name: Configure database name
   replace:
-    dest: "{{ {{ item.path }}path }}/fuel/app/config/development/db.php"
+    dest: "{{ {{ path }}path }}/fuel/app/config/development/db.php"
     regexp: "(.*)'dsn'(.*)"
-    replace: "                    'dsn' => 'mysql:host=localhost;dbname={{ {{ item.path }}mysql.database | default({{ item.path }}project) }}',"
+    replace: "                    'dsn' => 'mysql:host=localhost;dbname={{ {{ path }}mysql.database | default({{ path }}project) }}',"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: {{ item.path }}fuelphp != false
+  when: {{ path }}fuelphp != false
 
 - name: Configure database username
   replace:
-    dest: "{{ {{ item.path }}path }}/fuel/app/config/development/db.php"
+    dest: "{{ {{ path }}path }}/fuel/app/config/development/db.php"
     regexp: "(.*)'username'(.*)"
     replace: "                    'username' => '{{ global.mysql.user | default('root') }}',"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: {{ item.path }}fuelphp != false
+  when: {{ path }}fuelphp != false
 
 - name: Configure database password
   replace:
-    dest: "{{ {{ item.path }}path }}/fuel/app/config/development/db.php"
+    dest: "{{ {{ path }}path }}/fuel/app/config/development/db.php"
     regexp: "(.*)'password'(.*)"
     replace: "                    'password' => '{{ global.mysql.password | default('') }}',"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: {{ item.path }}fuelphp != false
+  when: {{ path }}fuelphp != false

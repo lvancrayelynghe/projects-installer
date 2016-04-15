@@ -2,16 +2,16 @@
 
 - name: Create virtualhosts
   template:
-    src: "{{ {{ item.path }}nginx.template | default('default') }}"
-    dest: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}.conf"
+    src: "{{ {{ path }}nginx.template | default('default') }}"
+    dest: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}.conf"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("nginx", false) | list
-  when: {{ item.path }}nginx != false
+  when: {{ path }}nginx != false
   register: create_virtualhost
   become: true
 
 - name: Remove disabled projects virtualhosts
   file:
-    path: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}.conf"
+    path: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}.conf"
     state: absent
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
   register: remove_virtualhost
@@ -20,18 +20,18 @@
 - name: Add projects in system hosts file
   lineinfile:
     dest: /etc/hosts
-    regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}$"
-    line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}"
+    regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}$"
+    line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}"
     state: present
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | list
-  when: {{ item.path }}nginx != false
+  when: {{ path }}nginx != false
   become: true
 
 - name: Remove disabled projects from system hosts file
   lineinfile:
     dest: /etc/hosts
-    regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}$"
-    line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}"
+    regexp: "^127\\.0\\.0\\.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}$"
+    line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}"
     state: absent
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
   become: true
@@ -56,8 +56,8 @@
 
 - name: Restart phpX-fpm
   service:
-    name: "{{ {{ item.path }}item }}"
+    name: "{{ {{ path }}item }}"
     state: restarted
   with_items: service_status.results
-  when: (create_virtualhost.changed or remove_virtualhost.changed) and {{ item.path }}stat.exists
+  when: (create_virtualhost.changed or remove_virtualhost.changed) and {{ path }}stat.exists
   become: true
