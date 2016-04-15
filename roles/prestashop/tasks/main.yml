@@ -1,37 +1,37 @@
 ---
 
 - name: Configure base url in configuration table
-  command: "mysql -e \"USE {{ item.mysql.database | default(item.project) }}; UPDATE `ps_configuration` SET `value`='{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}' WHERE `name` LIKE 'PS_SHOP_DOMAIN%' ;\""
+  command: "mysql -e \"USE {{ {{ item.path }}mysql.database | default({{ item.path }}project) }}; UPDATE `ps_configuration` SET `value`='{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}' WHERE `name` LIKE 'PS_SHOP_DOMAIN%' ;\""
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: item.prestashop != false and item.prestashop.configurl is defined and item.prestashop.configurl == true
+  when: {{ item.path }}prestashop != false and {{ item.path }}prestashop.configurl is defined and {{ item.path }}prestashop.configurl == true
   changed_when: false
 
 - name: Configure base url in shop table
-  command: "mysql -e \"USE {{ item.mysql.database | default(item.project) }}; UPDATE `ps_shop_url` SET `domain`='{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', item.project) }}', `domain_ssl`=`domain` LIMIT 1;\""
+  command: "mysql -e \"USE {{ {{ item.path }}mysql.database | default({{ item.path }}project) }}; UPDATE `ps_shop_url` SET `domain`='{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ item.path }}project) }}', `domain_ssl`=`domain` LIMIT 1;\""
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: item.prestashop != false and item.prestashop.shopurl is defined and item.prestashop.shopurl == true
+  when: {{ item.path }}prestashop != false and {{ item.path }}prestashop.shopurl is defined and {{ item.path }}prestashop.shopurl == true
   changed_when: false
 
 - name: Configure database name
   replace:
-    dest: "{{ item.path }}/config/settings.inc.php"
+    dest: "{{ {{ item.path }}path }}/config/settings.inc.php"
     regexp: "(.*)_DB_NAME_(.*)"
-    replace: "define('_DB_NAME_', '{{ item.mysql.database | default(item.project) }}');"
+    replace: "define('_DB_NAME_', '{{ {{ item.path }}mysql.database | default({{ item.path }}project) }}');"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: item.prestashop != false
+  when: {{ item.path }}prestashop != false
 
 - name: Configure database username
   replace:
-    dest: "{{ item.path }}/config/settings.inc.php"
+    dest: "{{ {{ item.path }}path }}/config/settings.inc.php"
     regexp: "(.*)_DB_USER_(.*)"
     replace: "define('_DB_USER_', '{{ global.mysql.user | default('root') }}');"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: item.prestashop != false
+  when: {{ item.path }}prestashop != false
 
 - name: Configure database password
   replace:
-    dest: "{{ item.path }}/config/settings.inc.php"
+    dest: "{{ {{ item.path }}path }}/config/settings.inc.php"
     regexp: "(.*)_DB_PASSWD_(.*)"
     replace: "define('_DB_PASSWD_', '{{ global.mysql.password | default('') }}');"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: item.prestashop != false
+  when: {{ item.path }}prestashop != false

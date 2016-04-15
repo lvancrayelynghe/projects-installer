@@ -1,7 +1,7 @@
-# Description: {{ item.name }}
+# Description: {{ {{ item.path }}name }}
 
-PROJECT_PATH="{{ item.path }}"
-PROJECT_DB="{{ item.project }}"
+PROJECT_PATH="{{ {{ item.path }}path }}"
+PROJECT_DB="{{ {{ item.path }}project }}"
 PROJECT_SQL="${PROJECT_PATH}/sql/${PROJECT_DB}.sql"
 
 source ~/.desk/base-project.sh $PROJECT_PATH

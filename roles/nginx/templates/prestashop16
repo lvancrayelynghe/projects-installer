@@ -1,7 +1,7 @@
 server {
     listen 80;
-    server_name {{ item.project }}.dev;
-    root {{ item.path }}{{ item.nginx.root is defined | ternary('/','') }}{{ item.nginx.root | default('') }};
+    server_name {{ {{ item.path }}project }}.dev;
+    root {{ {{ item.path }}path }}{{ {{ item.path }}nginx.root is defined | ternary('/','') }}{{ {{ item.path }}nginx.root | default('') }};
 
     index index.html index.htm index.php;
 
@@ -27,7 +27,7 @@ server {
     location = /robots.txt  { access_log off; log_not_found off; }
 
     access_log off;
-    error_log  /var/log/nginx/{{ item.project }}.dev-error.log error;
+    error_log  /var/log/nginx/{{ {{ item.path }}project }}.dev-error.log error;
 
     error_page 404 /index.php;
 
@@ -35,7 +35,7 @@ server {
 
     location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:{{ item.nginx.fastcgi | default(global.nginx.fastcgi) }};
+        fastcgi_pass unix:{{ {{ item.path }}nginx.fastcgi | default(global.nginx.fastcgi) }};
         fastcgi_index index.php;
         include fastcgi_params;
     }

@@ -2,7 +2,7 @@
 
 - name: Install packages
   composer:
-    working_dir: "{{ item.path }}"
+    working_dir: "{{ {{ item.path }}path }}"
     command: "install"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("composer", false) | list
-  when: item.composer != false
+  when: {{ item.path }}composer != false

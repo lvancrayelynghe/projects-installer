@@ -1,6 +1,6 @@
 ---
 
-- name: Add missing values
+- name: "Add missing values on \"{{ project }}\""
   set_fact:
     root:    "{{ root | mandatory }}"
     project: "{{ project | mandatory }}"
