@@ -22,8 +22,8 @@ npm_options: ""
 
 # Handle git repository
 git: false
-git_username:   "Benoth"
 git_email:      "benoth83@gmail.com"
+git_username:   "Benoth"
 git_repository: "git@github.com:{{ git_username }}/{{ project }}.git"
 
 # Handle MySQL databases

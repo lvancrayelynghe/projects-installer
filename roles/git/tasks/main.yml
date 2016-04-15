@@ -19,4 +19,36 @@
     state: absent
   when: (present == false or git == false) and repository_exist.stat.exists == true
 
-# @todo configure git repository with "git_username" and "git_email"
+- name: "Get git configuration user.email"
+  shell: "git config --local --get user.email"
+  args:
+    chdir: "{{ path }}"
+    warn: no
+  register: git_gathered_email
+  changed_when: false
+  failed_when: false
+  when: present and git
+
+- name: "Set git configuration user.email"
+  shell: "git config --local user.email \"{{ git_email }}\""
+  args:
+    chdir: "{{ path }}"
+    warn: no
+  when: present and git and git_gathered_email.stdout != git_email
+
+- name: "Get git configuration user.name"
+  shell: "git config --local --get user.name"
+  args:
+    chdir: "{{ path }}"
+    warn: no
+  register: git_gathered_name
+  changed_when: false
+  failed_when: false
+  when: present and git
+
+- name: "Set git configuration user.name"
+  shell: "git config --local user.name \"{{ git_username }}\""
+  args:
+    chdir: "{{ path }}"
+    warn: no
+  when: present and git and git_gathered_name.stdout != git_username
