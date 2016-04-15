@@ -14,7 +14,7 @@
     - npm
     - mysql
     - nginx
-    # - fuelphp
-    # - laravel
+    - fuelphp
+    - laravel
     # - prestashop
     # - wordpress

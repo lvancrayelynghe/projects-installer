@@ -6,57 +6,40 @@
     dest: "{{ path }}/.env"
     force: no
   register: create_env_file
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | list
-  when: laravel != false
+  when: present and laravel
 
 - name: Generate a new key
   command: php artisan key:generate
   args:
-    chdir: "{{ path }}{{ path }}"
-  with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ path }}{{ path }}laravel.key is defined and {{ path }}{{ path }}laravel.key == true
+    chdir: "{{ path }}"
+  when: create_env_file.changed and laravel_key
 
-- name: Configure database name
+- name: Configure MySQL database
   lineinfile:
     dest: "{{ path }}/.env"
-    regexp: "^DB_DATABASE="
-    line: "DB_DATABASE={{ path }}mysql.database | default({{ path }}project) }}"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | notbyattr("mysql", false) | list
-  when: laravel != false and {{ path }}mysql != false
-
-- name: Configure database username
-  lineinfile:
-    dest: "{{ path }}/.env"
-    regexp: "^DB_USERNAME="
-    line: "DB_USERNAME={{ global.mysql.user | default('root') }}"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | notbyattr("mysql", false) | list
-  when: laravel != false and {{ path }}mysql != false
-
-- name: Configure database password
-  lineinfile:
-    dest: "{{ path }}/.env"
-    regexp: "^DB_PASSWORD="
-    line: "DB_PASSWORD={{ global.mysql.password | default('') }}"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("laravel", false) | notbyattr("mysql", false) | list
-  when: laravel != false and {{ path }}mysql != false
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^DB_HOST=",     line: "DB_HOST={{ mysql_host | mandatory }}" }
+    - { regexp: "^DB_DATABASE=", line: "DB_DATABASE={{ mysql_database | mandatory }}" }
+    - { regexp: "^DB_USERNAME=", line: "DB_USERNAME={{ mysql_username | default('root') }}" }
+    - { regexp: "^DB_PASSWORD=", line: "DB_PASSWORD={{ mysql_password | default('') }}" }
+  when: present and mysql and laravel
 
 - name: Generate a new application key
   command: php artisan key:generate
   args:
-    chdir: "{{ path }}{{ path }}"
-  with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ path }}{{ path }}laravel.key is defined and {{ path }}{{ path }}laravel.key == true
+    chdir: "{{ path }}"
+  when: create_env_file.changed and laravel_key
 
 - name: Migrate database
   command: "php artisan migrate"
   args:
-    chdir: "{{ path }}{{ path }}"
-  with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ path }}{{ path }}laravel.migrate is defined and {{ path }}{{ path }}laravel.migrate == true
+    chdir: "{{ path }}"
+  when: create_env_file.changed and laravel_migrate
 
 - name: Seed database
   command: "php artisan db:seed"
   args:
-    chdir: "{{ path }}{{ path }}"
-  with_items: create_env_file.results | byattr("changed", true)
-  when: create_env_file.changed and {{ path }}{{ path }}laravel.migrate is defined and {{ path }}{{ path }}laravel.migrate == true and {{ path }}{{ path }}laravel.seed is defined and {{ path }}{{ path }}laravel.seed == true
+    chdir: "{{ path }}"
+  when: create_env_file.changed and laravel_seed

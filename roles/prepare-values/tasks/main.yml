@@ -2,13 +2,21 @@
 
 - name: "Add missing values on \"{{ project }}\""
   set_fact:
-    root:    "{{ root | mandatory }}"
-    project: "{{ project | mandatory }}"
-    name:    "{{ name | default(project) | mandatory }}"
-    path:    "{{ path | mandatory }}"
-    present: "{{ present | mandatory }}"
-
-    desk_template: "{{ desk_template | default('default') }}"
+    root:       "{{ root       | mandatory }}"
+    path:       "{{ path       | mandatory }}"
+    project:    "{{ project    | mandatory }}"
+    name:       "{{ name       | default(project) | mandatory }}"
+    present:    "{{ present    | mandatory }}"
+    git:        "{{ git        | mandatory }}"
+    desk:       "{{ desk       | mandatory }}"
+    composer:   "{{ composer   | mandatory }}"
+    npm:        "{{ npm        | mandatory }}"
+    mysql:      "{{ mysql      | mandatory }}"
+    nginx:      "{{ nginx      | mandatory }}"
+    fuelphp:    "{{ fuelphp    | mandatory }}"
+    laravel:    "{{ laravel    | mandatory }}"
+    prestashop: "{{ prestashop | mandatory }}"
+    wordpress:  "{{ wordpress  | mandatory }}"
 
 # - name: Debug value
 #   debug: var=git

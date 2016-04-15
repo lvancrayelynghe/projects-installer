@@ -1,33 +1,21 @@
 ---
 
-- name: Configure base url
+- name: Configure base URL
   replace:
     dest: "{{ path }}/fuel/app/config/development/config.php"
-    regexp: "(.*)'base_url'(.*)"
-    replace: "    'base_url' => null,"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: fuelphp != false
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - { regexp: "(.*)'base_url'(.*)", replace: "    'base_url' => {{ fuelphp_base_url }}," }
+  when: present and fuelphp
 
-- name: Configure database name
+- name: Configure MySQL database
   replace:
     dest: "{{ path }}/fuel/app/config/development/db.php"
-    regexp: "(.*)'dsn'(.*)"
-    replace: "                    'dsn' => 'mysql:host=localhost;dbname={{ path }}mysql.database | default({{ path }}project) }}',"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: fuelphp != false
-
-- name: Configure database username
-  replace:
-    dest: "{{ path }}/fuel/app/config/development/db.php"
-    regexp: "(.*)'username'(.*)"
-    replace: "                    'username' => '{{ global.mysql.user | default('root') }}',"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: fuelphp != false
-
-- name: Configure database password
-  replace:
-    dest: "{{ path }}/fuel/app/config/development/db.php"
-    regexp: "(.*)'password'(.*)"
-    replace: "                    'password' => '{{ global.mysql.password | default('') }}',"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("fuelphp", false) | list
-  when: fuelphp != false
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - { regexp: "(.*)'dsn'(.*)",      replace: "                    'dsn' => 'mysql:host={{ mysql_host | mandatory }};dbname={{ mysql_database | mandatory }}'," }
+    - { regexp: "(.*)'username'(.*)", replace: "                    'username' => '{{ mysql_username | default('root') }}'," }
+    - { regexp: "(.*)'password'(.*)", replace: "                    'password' => '{{ mysql_password | default('') }}'," }
+  when: present and mysql and fuelphp
