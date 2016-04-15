@@ -6,7 +6,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "DB_HOST",     line: "define('DB_HOST', '{{ mysql_host | mandatory }}" }
+    - { regexp: "DB_HOST",     line: "define('DB_HOST', '{{ mysql_host | mandatory }}');" }
     - { regexp: "DB_NAME",     line: "define('DB_NAME', '{{ mysql_database | mandatory }}');" }
     - { regexp: "DB_USER",     line: "define('DB_USER', '{{ mysql_username | default('root') }}');" }
     - { regexp: "DB_PASSWORD", line: "define('DB_PASSWORD', '{{ mysql_password | default('') }}');" }
