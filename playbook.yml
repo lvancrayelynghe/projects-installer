@@ -8,9 +8,9 @@
     - "{{ projects_path | mandatory }}/{{ project | mandatory }}.yml"
   roles:
     - prepare-values
-    # - git
-    # - desk
-    # - composer
+    - git
+    - desk
+    - composer
     # - npm
     # - mysql
     # - nginx

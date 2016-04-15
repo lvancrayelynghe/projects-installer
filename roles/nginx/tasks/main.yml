@@ -2,10 +2,10 @@
 
 - name: Create virtualhosts
   template:
-    src: "{{ {{ path }}nginx.template | default('default') }}"
+    src: "{{ path }}nginx.template | default('default') }}"
     dest: "{{ global.nginx.path | default('/etc/nginx/vhosts') }}/{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}.conf"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("nginx", false) | list
-  when: {{ path }}nginx != false
+  when: nginx != false
   register: create_virtualhost
   become: true
 
@@ -24,7 +24,7 @@
     line: "127.0.0.1   {{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}"
     state: present
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | list
-  when: {{ path }}nginx != false
+  when: nginx != false
   become: true
 
 - name: Remove disabled projects from system hosts file
@@ -56,7 +56,7 @@
 
 - name: Restart phpX-fpm
   service:
-    name: "{{ {{ path }}item }}"
+    name: "{{ path }}item }}"
     state: restarted
   with_items: service_status.results
   when: (create_virtualhost.changed or remove_virtualhost.changed) and {{ path }}stat.exists

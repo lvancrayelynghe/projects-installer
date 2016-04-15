@@ -2,24 +2,24 @@
 
 - name: Configure database name
   replace:
-    dest: "{{ {{ path }}path }}/wp-config.php"
+    dest: "{{ path }}/wp-config.php"
     regexp: "(.*)DB_NAME(.*)"
-    replace: "define('DB_NAME', '{{ {{ path }}mysql.database | default({{ path }}project) }}');"
+    replace: "define('DB_NAME', '{{ path }}mysql.database | default({{ path }}project) }}');"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("wordpress", false) | list
-  when: {{ path }}wordpress != false
+  when: wordpress != false
 
 - name: Configure database username
   replace:
-    dest: "{{ {{ path }}path }}/wp-config.php"
+    dest: "{{ path }}/wp-config.php"
     regexp: "(.*)DB_USER(.*)"
     replace: "define('DB_USER', '{{ global.mysql.user | default('root') }}');"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("wordpress", false) | list
-  when: {{ path }}wordpress != false
+  when: wordpress != false
 
 - name: Configure database password
   replace:
-    dest: "{{ {{ path }}path }}/wp-config.php"
+    dest: "{{ path }}/wp-config.php"
     regexp: "(.*)DB_PASSWORD(.*)"
     replace: "define('DB_PASSWORD', '{{ global.mysql.password | default('') }}');"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("wordpress", false) | list
-  when: {{ path }}wordpress != false
+  when: wordpress != false

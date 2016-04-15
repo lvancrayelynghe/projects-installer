@@ -3,6 +3,6 @@
 - name: Install packages
   command: "npm install {{ global.npm.options | default('') }}"
   args:
-    chdir: "{{ {{ path }}path }}"
+    chdir: "{{ path }}"
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("npm", false) | list
-  when: {{ path }}npm != false
+  when: npm != false

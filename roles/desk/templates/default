@@ -1,5 +1,5 @@
-# Description: {{ {{ path }}name }}
+# Description: {{ name }}
 
-PROJECT_PATH="{{ {{ path }}path }}"
+PROJECT_PATH="{{ path }}"
 
 source ~/.desk/base-project.sh $PROJECT_PATH

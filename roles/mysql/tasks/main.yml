@@ -2,22 +2,22 @@
 
 - name: Create databases
   mysql_db:
-    name: "{{ {{ path }}mysql.database | default({{ path }}project) }}"
+    name: "{{ path }}mysql.database | default({{ path }}project) }}"
     state: present
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("mysql", false) | list
-  when: {{ path }}mysql != false
+  when: mysql != false
   register: database_created
 
 - name: Import dumps
   mysql_db:
-    name: "{{ {{ path }}{{ path }}mysql.database | default({{ path }}{{ path }}project) }}"
+    name: "{{ path }}{{ path }}mysql.database | default({{ path }}{{ path }}project) }}"
     state: import
-    target: "{{ {{ path }}{{ path }}mysql.import | regex_replace('\\[\\[path\\]\\]', {{ path }}{{ path }}path) | regex_replace('\\[\\[project\\]\\]', {{ path }}{{ path }}project) }}"
+    target: "{{ path }}{{ path }}mysql.import | regex_replace('\\[\\[path\\]\\]', {{ path }}{{ path }}path) | regex_replace('\\[\\[project\\]\\]', {{ path }}{{ path }}project) }}"
   with_items: database_created.results | byattr("changed", true)
   when: database_created.changed and {{ path }}{{ path }}mysql.import is defined
 
 - name: Remove and clean databases
   mysql_db:
-    name: "{{ {{ path }}mysql.database | default({{ path }}project) }}"
+    name: "{{ path }}mysql.database | default({{ path }}project) }}"
     state: absent
   with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list

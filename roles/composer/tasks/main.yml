@@ -1,8 +1,7 @@
 ---
 
-- name: Install packages
+- name: "Install \"{{ project }}\" packages"
   composer:
-    working_dir: "{{ {{ path }}path }}"
+    working_dir: "{{ path }}"
     command: "install"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("composer", false) | list
-  when: {{ path }}composer != false
+  when: present and composer

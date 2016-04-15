@@ -1,14 +1,13 @@
 ---
 
-- name: Create Deskfiles
+- name: "Create \"{{ project }}\" Deskfile"
   template:
-    src: "{{ {{ path }}desk.template | default('default') }}"
-    dest: "~/.desk/desks/{{ {{ path }}project }}.sh"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("desk", false) | list
-  when: {{ path }}desk != false
+    src: "{{ desk_template }}"
+    dest: "~/.desk/desks/{{ project }}.sh"
+  when: present and desk
 
-- name: Remove and clean Deskfiles
+- name: "Remove \"{{ project }}\" Deskfile"
   file:
-    path: "~/.desk/desks/{{ {{ path }}project }}.sh"
+    path: "~/.desk/desks/{{ project }}.sh"
     state: absent
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
+  when: present == false or desk == false

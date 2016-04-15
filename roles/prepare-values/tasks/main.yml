@@ -8,5 +8,7 @@
     path:    "{{ path | mandatory }}"
     present: "{{ present | mandatory }}"
 
+    desk_template: "{{ desk_template | default('default') }}"
+
 # - name: Debug value
 #   debug: var=git

@@ -11,6 +11,10 @@ present: true
 
 # Handle Desk files
 desk: false
+desk_template: "default"
+
+# Handle Composer packages
+composer: false
 
 # Handle git repository
 git: false
