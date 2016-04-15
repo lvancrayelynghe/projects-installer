@@ -1,25 +1,13 @@
 ---
 
-- name: Configure database name
-  replace:
+- name: Configure MySQL database
+  lineinfile:
     dest: "{{ path }}/wp-config.php"
-    regexp: "(.*)DB_NAME(.*)"
-    replace: "define('DB_NAME', '{{ path }}mysql.database | default({{ path }}project) }}');"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("wordpress", false) | list
-  when: wordpress != false
-
-- name: Configure database username
-  replace:
-    dest: "{{ path }}/wp-config.php"
-    regexp: "(.*)DB_USER(.*)"
-    replace: "define('DB_USER', '{{ global.mysql.user | default('root') }}');"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("wordpress", false) | list
-  when: wordpress != false
-
-- name: Configure database password
-  replace:
-    dest: "{{ path }}/wp-config.php"
-    regexp: "(.*)DB_PASSWORD(.*)"
-    replace: "define('DB_PASSWORD', '{{ global.mysql.password | default('') }}');"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("wordpress", false) | list
-  when: wordpress != false
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "DB_HOST",     line: "define('DB_HOST', '{{ mysql_host | mandatory }}" }
+    - { regexp: "DB_NAME",     line: "define('DB_NAME', '{{ mysql_database | mandatory }}');" }
+    - { regexp: "DB_USER",     line: "define('DB_USER', '{{ mysql_username | default('root') }}');" }
+    - { regexp: "DB_PASSWORD", line: "define('DB_PASSWORD', '{{ mysql_password | default('') }}');" }
+  when: present and mysql and wordpress

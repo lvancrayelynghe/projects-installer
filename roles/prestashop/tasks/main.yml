@@ -1,37 +1,23 @@
 ---
 
+- name: Configure MySQL database
+  lineinfile:
+    dest: "{{ path }}/config/settings.inc.php"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "_DB_SERVER_", line: "define('_DB_SERVER_', '{{ mysql_host | mandatory }}');" }
+    - { regexp: "_DB_NAME_",   line: "define('_DB_NAME_', '{{ mysql_database | mandatory }}');" }
+    - { regexp: "_DB_USER_",   line: "define('_DB_USER_', '{{ mysql_username | default('root') }}');" }
+    - { regexp: "_DB_PASSWD_", line: "define('_DB_PASSWD_', '{{ mysql_password | default('') }}');" }
+  when: present and mysql and prestashop
+
 - name: Configure base url in configuration table
-  command: "mysql -e \"USE {{ path }}mysql.database | default({{ path }}project) }}; UPDATE `ps_configuration` SET `value`='{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}' WHERE `name` LIKE 'PS_SHOP_DOMAIN%' ;\""
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: prestashop != false and {{ path }}prestashop.configurl is defined and {{ path }}prestashop.configurl == true
+  command: "mysql -e \"USE {{ mysql_database }}; UPDATE `ps_configuration` SET `value`='{{ nginx_host }}' WHERE `name` LIKE 'PS_SHOP_DOMAIN%' ;\""
+  when: present and prestashop and prestashop_configurl
   changed_when: false
 
 - name: Configure base url in shop table
-  command: "mysql -e \"USE {{ path }}mysql.database | default({{ path }}project) }}; UPDATE `ps_shop_url` SET `domain`='{{ global.nginx.hostname | default('[[project]].dev') | regex_replace('\\[\\[project\\]\\]', {{ path }}project) }}', `domain_ssl`=`domain` LIMIT 1;\""
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: prestashop != false and {{ path }}prestashop.shopurl is defined and {{ path }}prestashop.shopurl == true
+  command: "mysql -e \"USE {{ mysql_database }}; UPDATE `ps_shop_url` SET `domain`='{{ nginx_host }}', `domain_ssl`=`domain` LIMIT 1;\""
+  when: present and prestashop and prestashop_shopurl
   changed_when: false
-
-- name: Configure database name
-  replace:
-    dest: "{{ path }}/config/settings.inc.php"
-    regexp: "(.*)_DB_NAME_(.*)"
-    replace: "define('_DB_NAME_', '{{ path }}mysql.database | default({{ path }}project) }}');"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: prestashop != false
-
-- name: Configure database username
-  replace:
-    dest: "{{ path }}/config/settings.inc.php"
-    regexp: "(.*)_DB_USER_(.*)"
-    replace: "define('_DB_USER_', '{{ global.mysql.user | default('root') }}');"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: prestashop != false
-
-- name: Configure database password
-  replace:
-    dest: "{{ path }}/config/settings.inc.php"
-    regexp: "(.*)_DB_PASSWD_(.*)"
-    replace: "define('_DB_PASSWD_', '{{ global.mysql.password | default('') }}');"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("prestashop", false) | list
-  when: prestashop != false

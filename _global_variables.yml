@@ -55,7 +55,9 @@ laravel_migrate: false
 laravel_seed:    false
 
 # Handle Prestashop projects
-prestashop: false
+prestashop:           false
+prestashop_configurl: false
+prestashop_shopurl:   false
 
 # Handle Wordpress projects
 wordpress: false
