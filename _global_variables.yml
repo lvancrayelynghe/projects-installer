@@ -1,0 +1,35 @@
+---
+
+# Global variables
+### project: undefined but mandatory
+### name: undefined
+root: "/home/vagrant/shared"
+path: "{{ root }}/{{ project }}"
+
+# Project present or not
+present: true
+
+# Handle Desk files
+desk: false
+
+# Handle git repository
+git: false
+git_username:   "Benoth"
+git_email:      "benoth83@gmail.com"
+git_repository: "git@github.com:{{ git_username }}/{{ project }}.git"
+
+# Handle MySQL databases
+mysql:          false
+mysql_database: "{{ project }}"
+mysql_host:     "localhost"
+mysql_username: "root"
+mysql_password: "secret"
+mysql_dumps:    []
+mysql_queries:  []
+
+# Handle nginx virtualhosts
+nginx:         false
+nginx_host:    "[[project]].dev"
+nginx_path:    "/etc/nginx/conf.d"
+nginx_fastcgi: "/var/run/php/php5.6-fpm.sock"
+nginx_file:    "{{ nginx_host }}.conf"

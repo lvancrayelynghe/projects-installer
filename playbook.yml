@@ -1,17 +1,16 @@
 ---
 
 - hosts: localhost
+  gather_facts: false
   vars_files:
-    - "{{ config_file | mandatory }}"
+    - "_global_variables.yml"
+    - "{{ projects_path | mandatory }}/_projects_variables.yml"
+    - "{{ projects_path | mandatory }}/{{ project | mandatory }}.yml"
   roles:
-    - setfacts
+    - prepare-values
     - git
-    - desk
-    - composer
-    - npm
-    - mysql
-    - nginx
-    - fuelphp
-    - laravel
-    - prestashop
-    - wordpress
+    # - desk
+    # - composer
+    # - npm
+    # - mysql
+    # - nginx

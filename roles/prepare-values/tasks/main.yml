@@ -1,0 +1,12 @@
+---
+
+- name: Add missing values
+  set_fact:
+    root:    "{{ root | mandatory }}"
+    project: "{{ project | mandatory }}"
+    name:    "{{ name | default(project) | mandatory }}"
+    path:    "{{ path | mandatory }}"
+    present: "{{ present | mandatory }}"
+
+# - name: Debug value
+#   debug: var=git

@@ -1,23 +1,22 @@
 ---
 
-- name: Check if repositories exists
+- name: "Check if {{ project }} repository exist"
   stat:
-    path: "{{ item.path }}/.git"
+    path: "{{ path }}/.git"
     follow: true
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | list
   register: repository_exist
-  when: item.repo != false
 
-- name: Clone repositories
+- name: "Clone {{ project }} repository"
   git:
-    repo: "{{ item.item.repo }}"
-    dest: "{{ item.item.path }}"
+    repo: "{{ git_repository }}"
+    dest: "{{ path }}"
     accept_hostkey: true
-  with_items: repository_exist.results
-  when: item.item.repo != false and item.stat.exists == false
+  when: present and git and repository_exist.stat.exists == false
 
-- name: Remove disabled projects repositories
+- name: "Remove disabled {{ project }} repository"
   file:
-    path: "{{ item.path }}"
+    path: "{{ path }}"
     state: absent
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "absent") | list
+  when: (present == false or git == false) and repository_exist.stat.exists == true
+
+# @todo configure git repository with "git_username" and "git_email"
