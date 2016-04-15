@@ -4,7 +4,7 @@
   gather_facts: false
   vars_files:
     - "_global_variables.yml"
-    - "{{ projects_path | mandatory }}/_projects_variables.yml"
+    - "{{ projects_path | mandatory }}/_group_variables.yml"
     - "{{ projects_path | mandatory }}/{{ project | mandatory }}.yml"
   roles:
     - prepare-values

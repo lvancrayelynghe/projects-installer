@@ -25,7 +25,7 @@ if [ ! "${PROJECTS}" ]; then
 fi
 
 if [ -d "${PROJECTS}" ]; then
-    FILES=($(cd ${PROJECTS} && ls -1 *.yml 2>/dev/null | grep -v "_projects_variables.yml"))
+    FILES=($(cd ${PROJECTS} && ls -1 *.yml 2>/dev/null | grep -v "_group_variables.yml"))
     if (( ${#FILES[@]} == 0 )); then
         echo "No file in directory \"${PROJECTS}\"" >&2
         exit 1
