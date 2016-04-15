@@ -2,12 +2,20 @@
 
 ## Usage
 
-### 1. Create a configuration file
+### 1. Create a group configuration file
 
-See the provided template `configuration.template.yml`. Save your configuration file anywhere (in your dotfiles ?).
+The file must be named `_group_variables.yml`. It inherit from `_global_variables.yml`, so just update the needed vars.
 
-### 2. Run the playbook
+Save the file in the `projects` directory or in a subdirectory (to create "groups" of projects)
 
-Run `ansible-playbook playbook.yml -e "config_file=/path/to/configuration.yml"`
 
-Or create an alias `alias projects='ansible-playbook playbook.yml -e "config_file=/path/to/configuration.yml"'`
+### 2. Create a project configuration file
+
+Create a file named `project-name.yml` in a group's directory. It inherit from the previous `_group_variables.yml`, again, update only the needed variables.
+
+The filename is used as project name.
+
+
+### 3. Run the playbook
+
+Run `./run.sh projects/group` for a full group or `./run.sh projects/group/project.yml` for a single project
