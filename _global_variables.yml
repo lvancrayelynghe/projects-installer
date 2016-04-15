@@ -16,6 +16,10 @@ desk_template: "default"
 # Handle Composer packages
 composer: false
 
+# Handle NPM packages
+npm:         false
+npm_options: ""
+
 # Handle git repository
 git: false
 git_username:   "Benoth"

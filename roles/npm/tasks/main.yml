@@ -1,8 +1,7 @@
 ---
 
-- name: Install packages
-  command: "npm install {{ global.npm.options | default('') }}"
+- name: "Install \"{{ project }}\" packages"
+  command: "npm install {{ npm_options }}"
   args:
     chdir: "{{ path }}"
-  with_items: items.results | map(attribute='ansible_facts') | byattr("state", "present") | notbyattr("npm", false) | list
-  when: npm != false
+  when: present and npm
