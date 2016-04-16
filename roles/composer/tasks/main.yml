@@ -5,8 +5,14 @@
   when: composer
   changed_when: true
 
-- name: "Install \"{{ project }}\" packages"
+- name: "Check if vendor directory exist"
+  stat:
+    path: "{{ path }}/vendor"
+    follow: true
+  register: vendor_exist
+
+- name: "Install packages"
   composer:
     working_dir: "{{ path }}"
     command: "install"
-  when: present and composer
+  when: present and composer and vendor_exist.stat.exists == false

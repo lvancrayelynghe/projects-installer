@@ -5,8 +5,14 @@
   when: npm
   changed_when: true
 
-- name: "Install \"{{ project }}\" packages"
+- name: "Check if node_modules directory exist"
+  stat:
+    path: "{{ path }}/node_modules"
+    follow: true
+  register: node_modules_exist
+
+- name: "Install packages"
   command: "npm install {{ npm_options }}"
   args:
     chdir: "{{ path }}"
-  when: present and npm
+  when: present and npm and node_modules_exist.stat.exists == false
