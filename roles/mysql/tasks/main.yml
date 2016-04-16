@@ -5,14 +5,14 @@
   when: mysql
   changed_when: true
 
-- name: "Create \"{{ project }}\" database"
+- name: "Create database"
   mysql_db:
     name: "{{ mysql_database | mandatory }}"
     state: present
   when: present and mysql
   register: database_created
 
-- name: "Import \"{{ project }}\" dumps"
+- name: "Import dumps"
   mysql_db:
     name: "{{ mysql_database }}"
     state: import
@@ -20,7 +20,7 @@
   with_items: mysql_imports
   when: present and mysql and database_created.changed
 
-- name: "Remove \"{{ project }}\" database"
+- name: "Remove database"
   mysql_db:
     name: "{{ mysql_database }}"
     state: absent

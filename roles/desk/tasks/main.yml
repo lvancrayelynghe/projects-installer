@@ -5,13 +5,13 @@
   when: desk
   changed_when: true
 
-- name: "Create \"{{ project }}\" Deskfile"
+- name: "Create Deskfile"
   template:
     src: "{{ desk_template }}"
     dest: "~/.desk/desks/{{ project }}.sh"
   when: present and desk
 
-- name: "Remove \"{{ project }}\" Deskfile"
+- name: "Remove Deskfile"
   file:
     path: "~/.desk/desks/{{ project }}.sh"
     state: absent

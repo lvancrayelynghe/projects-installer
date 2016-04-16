@@ -5,20 +5,20 @@
   when: git
   changed_when: true
 
-- name: "Check if \"{{ project }}\" repository exist"
+- name: "Check if repository exist"
   stat:
     path: "{{ path }}/.git"
     follow: true
   register: repository_exist
 
-- name: "Clone \"{{ project }}\" repository"
+- name: "Clone repository"
   git:
     repo: "{{ git_repository }}"
     dest: "{{ path }}"
     accept_hostkey: true
   when: present and git and repository_exist.stat.exists == false
 
-- name: "Remove disabled \"{{ project }}\" repository"
+- name: "Remove disabled repository"
   file:
     path: "{{ path }}"
     state: absent
