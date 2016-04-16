@@ -24,6 +24,25 @@
     state: absent
   when: (present == false or git == false) and repository_exist.stat.exists == true
 
+
+
+- name: "Get git configuration remote.origin.urluser.email"
+  shell: "git config --local --get remote.origin.url"
+  args:
+    chdir: "{{ path }}"
+    warn: no
+  register: git_gathered_remote_origin
+  changed_when: false
+  failed_when: false
+  when: present and git
+
+- name: "Set git configuration remote.origin.url"
+  shell: "git config --local remote.origin.url \"{{ git_repository }}\""
+  args:
+    chdir: "{{ path }}"
+    warn: no
+  when: present and git and git_gathered_remote_origin.stdout != git_repository
+
 - name: "Get git configuration user.email"
   shell: "git config --local --get user.email"
   args:
