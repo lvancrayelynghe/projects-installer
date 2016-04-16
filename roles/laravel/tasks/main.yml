@@ -1,5 +1,10 @@
 ---
 
+- name: "Running Laravel role"
+  debug: msg="project"
+  when: laravel
+  changed_when: true
+
 - name: Create .env file
   copy:
     src: "{{ path }}/.env.example"

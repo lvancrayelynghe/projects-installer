@@ -1,5 +1,10 @@
 ---
 
+- name: "Running Git role"
+  debug: msg="project"
+  when: git
+  changed_when: true
+
 - name: "Check if \"{{ project }}\" repository exist"
   stat:
     path: "{{ path }}/.git"

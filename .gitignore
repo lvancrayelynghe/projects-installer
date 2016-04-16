@@ -1,2 +1,2 @@
-filter_plugins/core.pyc
+*.pyc
 configuration.yml

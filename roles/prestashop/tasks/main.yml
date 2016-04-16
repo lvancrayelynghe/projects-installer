@@ -1,5 +1,10 @@
 ---
 
+- name: "Running Prestashop role"
+  debug: msg="project"
+  when: prestashop
+  changed_when: true
+
 - name: Configure MySQL database
   lineinfile:
     dest: "{{ path }}/config/settings.inc.php"

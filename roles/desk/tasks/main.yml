@@ -1,5 +1,10 @@
 ---
 
+- name: "Running Desk role"
+  debug: msg="project"
+  when: desk
+  changed_when: true
+
 - name: "Create \"{{ project }}\" Deskfile"
   template:
     src: "{{ desk_template }}"

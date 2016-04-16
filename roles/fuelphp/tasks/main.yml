@@ -1,5 +1,10 @@
 ---
 
+- name: "Running FuelPHP role"
+  debug: msg="project"
+  when: fuelphp
+  changed_when: true
+
 - name: Configure base URL
   replace:
     dest: "{{ path }}/fuel/app/config/development/config.php"
