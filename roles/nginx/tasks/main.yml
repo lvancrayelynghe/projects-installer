@@ -61,6 +61,6 @@
   service:
     name: "{{ item.item }}"
     state: restarted
-  with_items: service_status.results
+  with_items: "{{ service_status.results }}"
   when: (create_virtualhost.changed or remove_virtualhost.changed) and item.stat.exists
   become: true

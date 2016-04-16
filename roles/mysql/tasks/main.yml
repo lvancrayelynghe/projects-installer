@@ -17,7 +17,7 @@
     name: "{{ mysql_database }}"
     state: import
     target: "{{ item }}"
-  with_items: mysql_imports
+  with_items: "{{ mysql_imports }}"
   when: present and mysql and database_created.changed
 
 - name: "Remove database"
