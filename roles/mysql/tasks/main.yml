@@ -20,6 +20,11 @@
   with_items: "{{ mysql_imports }}"
   when: present == true and mysql == true and database_created.changed
 
+- name: "Run queries"
+  command: "mysql -e \"USE {{ mysql_database }}; {{ item }};\""
+  with_items: "{{ mysql_queries }}"
+  when: present == true and mysql == true and database_created.changed
+
 - name: "Remove database"
   mysql_db:
     name: "{{ mysql_database }}"
