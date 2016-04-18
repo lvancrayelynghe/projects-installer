@@ -2,7 +2,7 @@
 
 - name: "Running Git role"
   debug: msg="project"
-  when: git
+  when: git == true
   changed_when: true
 
 - name: "Check if repository exist"
@@ -16,15 +16,13 @@
     repo: "{{ git_repository }}"
     dest: "{{ path }}"
     accept_hostkey: true
-  when: present and git and repository_exist.stat.exists == false
+  when: present == true and git == true and repository_exist.stat.exists == false
 
 - name: "Remove disabled repository"
   file:
     path: "{{ path }}"
     state: absent
   when: (present == false or git == false) and repository_exist.stat.exists == true
-
-
 
 - name: "Get git configuration remote.origin.urluser.email"
   shell: "git config --local --get remote.origin.url"
@@ -34,14 +32,14 @@
   register: git_gathered_remote_origin
   changed_when: false
   failed_when: false
-  when: present and git
+  when: present == true and git == true
 
 - name: "Set git configuration remote.origin.url"
   shell: "git config --local remote.origin.url \"{{ git_repository }}\""
   args:
     chdir: "{{ path }}"
     warn: no
-  when: present and git and git_gathered_remote_origin.stdout != git_repository
+  when: present == true and git == true and git_gathered_remote_origin.stdout != git_repository
 
 - name: "Get git configuration user.email"
   shell: "git config --local --get user.email"
@@ -51,14 +49,14 @@
   register: git_gathered_email
   changed_when: false
   failed_when: false
-  when: present and git
+  when: present == true and git == true
 
 - name: "Set git configuration user.email"
   shell: "git config --local user.email \"{{ git_email }}\""
   args:
     chdir: "{{ path }}"
     warn: no
-  when: present and git and git_gathered_email.stdout != git_email
+  when: present == true and git == true and git_gathered_email.stdout != git_email
 
 - name: "Get git configuration user.name"
   shell: "git config --local --get user.name"
@@ -68,11 +66,11 @@
   register: git_gathered_name
   changed_when: false
   failed_when: false
-  when: present and git
+  when: present == true and git == true
 
 - name: "Set git configuration user.name"
   shell: "git config --local user.name \"{{ git_username }}\""
   args:
     chdir: "{{ path }}"
     warn: no
-  when: present and git and git_gathered_name.stdout != git_username
+  when: present == true and git == true and git_gathered_name.stdout != git_username

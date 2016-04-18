@@ -2,7 +2,7 @@
 
 - name: "Running FuelPHP role"
   debug: msg="project"
-  when: fuelphp
+  when: fuelphp == true
   changed_when: true
 
 - name: Configure base URL
@@ -12,7 +12,7 @@
     replace: "{{ item.replace }}"
   with_items:
     - { regexp: "(.*)'base_url'(.*)", replace: "    'base_url' => {{ fuelphp_base_url }}," }
-  when: present and fuelphp
+  when: present == true and fuelphp == true
 
 - name: Configure MySQL database
   replace:
@@ -23,4 +23,4 @@
     - { regexp: "(.*)'dsn'(.*)",      replace: "                    'dsn' => 'mysql:host={{ mysql_host | mandatory }};dbname={{ mysql_database | mandatory }}'," }
     - { regexp: "(.*)'username'(.*)", replace: "                    'username' => '{{ mysql_username | default('root') }}'," }
     - { regexp: "(.*)'password'(.*)", replace: "                    'password' => '{{ mysql_password | default('') }}'," }
-  when: present and mysql and fuelphp
+  when: present == true and mysql == true and fuelphp == true

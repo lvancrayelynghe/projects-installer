@@ -2,14 +2,14 @@
 
 - name: "Running MySQL role"
   debug: msg="project"
-  when: mysql
+  when: mysql == true
   changed_when: true
 
 - name: "Create database"
   mysql_db:
     name: "{{ mysql_database | mandatory }}"
     state: present
-  when: present and mysql
+  when: present == true and mysql == true
   register: database_created
 
 - name: "Import dumps"
@@ -18,7 +18,7 @@
     state: import
     target: "{{ item }}"
   with_items: "{{ mysql_imports }}"
-  when: present and mysql and database_created.changed
+  when: present == true and mysql == true and database_created.changed
 
 - name: "Remove database"
   mysql_db:

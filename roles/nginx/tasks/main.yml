@@ -2,14 +2,14 @@
 
 - name: "Running nginx role"
   debug: msg="project"
-  when: nginx
+  when: nginx == true
   changed_when: true
 
 - name: Create virtualhost
   template:
     src: "{{ nginx_template | mandatory }}"
     dest: "{{ nginx_conf | mandatory }}"
-  when: present and nginx
+  when: present == true and nginx == true
   register: create_virtualhost
   become: true
 
@@ -27,7 +27,7 @@
     regexp: "^127\\.0\\.0\\.1   {{ nginx_host }}$"
     line: "127.0.0.1   {{ nginx_host }}"
     state: present
-  when: present and nginx
+  when: present == true and nginx == true
   become: true
 
 - name: Remove disabled projects from system hosts file

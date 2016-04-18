@@ -2,7 +2,7 @@
 
 - name: "Running NPM role"
   debug: msg="project"
-  when: npm
+  when: npm == true
   changed_when: true
 
 - name: "Check if node_modules directory exist"
@@ -15,4 +15,4 @@
   command: "npm install {{ npm_options }}"
   args:
     chdir: "{{ path }}"
-  when: present and npm and node_modules_exist.stat.exists == false
+  when: present == true and npm == true and node_modules_exist.stat.exists == false

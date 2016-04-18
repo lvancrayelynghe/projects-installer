@@ -2,7 +2,7 @@
 
 - name: "Running Composer role"
   debug: msg="project"
-  when: composer
+  when: composer == true
   changed_when: true
 
 - name: "Check if vendor directory exist"
@@ -15,4 +15,4 @@
   composer:
     working_dir: "{{ path }}"
     command: "install"
-  when: present and composer and vendor_exist.stat.exists == false
+  when: present == true and composer == true and vendor_exist.stat.exists == false

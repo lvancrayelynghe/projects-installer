@@ -2,14 +2,14 @@
 
 - name: "Running Desk role"
   debug: msg="project"
-  when: desk
+  when: desk == true
   changed_when: true
 
 - name: "Create Deskfile"
   template:
     src: "{{ desk_template }}"
     dest: "~/.desk/desks/{{ project }}.sh"
-  when: present and desk
+  when: present == true and desk == true
 
 - name: "Remove Deskfile"
   file:

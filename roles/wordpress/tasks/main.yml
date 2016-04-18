@@ -2,7 +2,7 @@
 
 - name: "Running Wordpress role"
   debug: msg="project"
-  when: wordpress
+  when: wordpress == true
   changed_when: true
 
 - name: Configure MySQL database
@@ -15,4 +15,4 @@
     - { regexp: "DB_NAME",     line: "define('DB_NAME', '{{ mysql_database | mandatory }}');" }
     - { regexp: "DB_USER",     line: "define('DB_USER', '{{ mysql_username | default('root') }}');" }
     - { regexp: "DB_PASSWORD", line: "define('DB_PASSWORD', '{{ mysql_password | default('') }}');" }
-  when: present and mysql and wordpress
+  when: present == true and mysql == true and wordpress == true

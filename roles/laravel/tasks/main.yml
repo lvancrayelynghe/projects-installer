@@ -2,7 +2,7 @@
 
 - name: "Running Laravel role"
   debug: msg="project"
-  when: laravel
+  when: laravel == true
   changed_when: true
 
 - name: Create .env file
@@ -11,13 +11,13 @@
     dest: "{{ path }}/.env"
     force: no
   register: create_env_file
-  when: present and laravel
+  when: present == true and laravel == true
 
 - name: Generate a new key
   command: php artisan key:generate
   args:
     chdir: "{{ path }}"
-  when: create_env_file.changed and laravel_key
+  when: create_env_file.changed and laravel_key == true
 
 - name: Configure MySQL database
   lineinfile:
@@ -29,22 +29,22 @@
     - { regexp: "^DB_DATABASE=", line: "DB_DATABASE={{ mysql_database | mandatory }}" }
     - { regexp: "^DB_USERNAME=", line: "DB_USERNAME={{ mysql_username | default('root') }}" }
     - { regexp: "^DB_PASSWORD=", line: "DB_PASSWORD={{ mysql_password | default('') }}" }
-  when: present and mysql and laravel
+  when: present == true and mysql == true and laravel == true
 
 - name: Generate a new application key
   command: php artisan key:generate
   args:
     chdir: "{{ path }}"
-  when: create_env_file.changed and laravel_key
+  when: create_env_file.changed and laravel_key == true
 
 - name: Migrate database
   command: "php artisan migrate"
   args:
     chdir: "{{ path }}"
-  when: create_env_file.changed and laravel_migrate
+  when: create_env_file.changed and laravel_migrate == true
 
 - name: Seed database
   command: "php artisan db:seed"
   args:
     chdir: "{{ path }}"
-  when: create_env_file.changed and laravel_seed
+  when: create_env_file.changed and laravel_seed == true
