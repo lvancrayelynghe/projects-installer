@@ -15,4 +15,5 @@
   composer:
     working_dir: "{{ path }}"
     command: "install"
+    no-dev: "no"
   when: present == true and composer == true and vendor_exist.stat.exists == false
