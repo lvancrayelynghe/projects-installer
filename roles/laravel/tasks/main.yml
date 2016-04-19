@@ -13,12 +13,6 @@
   register: create_env_file
   when: present == true and laravel == true
 
-- name: Generate a new key
-  command: php artisan key:generate
-  args:
-    chdir: "{{ path }}"
-  when: create_env_file.changed and laravel_key == true
-
 - name: Configure MySQL database
   lineinfile:
     dest: "{{ path }}/.env"
