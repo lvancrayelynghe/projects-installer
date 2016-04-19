@@ -40,6 +40,7 @@ server {
             rewrite ^/authentification(.*)$ /authentication.php$1 last;
             rewrite ^/meilleures-ventes(.*)$ /best-sales.php$1 last;
             rewrite ^/panier(.*)$ /cart.php$1 last;
+            rewrite ^/mon-panier(.*)$ /new-cart-order.php$1 last;
             rewrite ^/contactez-nous(.*)$ /contact-form.php$1 last;
             rewrite ^/bons-de-reduction(.*)$ /discount.php$1 last;
             rewrite ^/suivi-commande-invite(.*)$ /guest-tracking.php$1 last;
