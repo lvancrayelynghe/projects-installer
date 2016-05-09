@@ -1,4 +1,4 @@
 ---
 
-root: "/home/{{ ansible_env.USER }}/projets/perso"
+root: "/home/{{ ansible_env.USER }}/projects/benoth"
 git:  true
