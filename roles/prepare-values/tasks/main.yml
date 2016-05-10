@@ -10,6 +10,7 @@
     path:       "{{ path       | mandatory }}"
     project:    "{{ project    | mandatory }}"
     name:       "{{ name       | default(project) | mandatory }}"
+    host:       "{{ host       | default(project + '.fr') }}"
     present:    "{{ present    | mandatory }}"
     git:        "{{ git        | mandatory }}"
     desk:       "{{ desk       | mandatory }}"

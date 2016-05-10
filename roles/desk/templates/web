@@ -3,6 +3,7 @@
 PROJECT_PATH="{{ path }}"
 PROJECT_DB="{{ project }}"
 PROJECT_SQL="${PROJECT_PATH}/sql/${PROJECT_DB}.sql"
+PROJECT_HOST="{{ host }}"
 
 source ~/.desk/base-project.sh $PROJECT_PATH
-source ~/.desk/web-project.sh $PROJECT_PATH $PROJECT_DB $PROJECT_SQL
+source ~/.desk/web-project.sh $PROJECT_PATH $PROJECT_DB $PROJECT_SQL $PROJECT_HOST
