@@ -5,11 +5,22 @@
   when: desk == true
   changed_when: true
 
-- name: "Create Deskfile"
+- name: Check if project deskfile is provided
+  stat:
+    path: "{{ projects_path }}/files/desk/{{ project }}.sh"
+  register: provided
+
+- name: "Create Deskfile from template"
   template:
     src: "{{ desk_template }}"
     dest: "~/.desk/desks/{{ project }}.sh"
-  when: present == true and desk == true
+  when: present == true and desk == true and provided.stat.exists == false
+
+- name: "Copy provided Deskfile"
+  template:
+    src: "{{ provided.stat.path }}"
+    dest: "~/.desk/desks/{{ project }}.sh"
+  when: present == true and desk == true and provided.stat.exists == true
 
 - name: "Remove Deskfile"
   file:
