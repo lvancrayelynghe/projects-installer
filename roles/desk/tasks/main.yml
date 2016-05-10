@@ -7,7 +7,7 @@
 
 - name: Check if project deskfile is provided
   stat:
-    path: "{{ projects_path }}/files/desk/{{ project }}.sh"
+    path: "{{ projects_path }}/files/desk/{{ project }}"
   register: provided
 
 - name: "Create Deskfile from template"
