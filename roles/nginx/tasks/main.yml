@@ -5,11 +5,24 @@
   when: nginx == true
   changed_when: true
 
-- name: Create virtualhost
+- name: Check if project nginx conf is provided
+  stat:
+    path: "{{ projects_path }}/files/nginx/{{ project }}"
+  register: provided
+
+- name: Create virtualhost from template
   template:
     src: "{{ nginx_template | mandatory }}"
     dest: "{{ nginx_conf | mandatory }}"
-  when: present == true and nginx == true
+  when: present == true and nginx == true and provided.stat.exists == false
+  register: create_virtualhost
+  become: true
+
+- name: "Copy provided nginx conf"
+  template:
+    src: "{{ provided.stat.path }}"
+    dest: "{{ nginx_conf | mandatory }}"
+  when: present == true and nginx == true and provided.stat.exists == true
   register: create_virtualhost
   become: true
 
