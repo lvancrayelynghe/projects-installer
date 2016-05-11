@@ -10,24 +10,24 @@ path: "{{ root }}/{{ project }}"
 present: true
 
 # Handle Desk files
-desk: false
+desk:          null
 desk_template: "default"
 
 # Handle Composer packages
-composer: false
+composer: null
 
 # Handle NPM packages
-npm:         false
+npm:         null
 npm_options: ""
 
 # Handle git repository
-git: false
+git:            null
 git_email:      "benoth83@gmail.com"
 git_username:   "Benoth"
 git_repository: "git@github.com:{{ git_username }}/{{ project }}.git"
 
 # Handle MySQL databases
-mysql:          false
+mysql:          null
 mysql_database: "{{ project }}"
 mysql_host:     "localhost"
 mysql_username: "root"
@@ -36,7 +36,7 @@ mysql_imports:  []
 mysql_queries:  []
 
 # Handle nginx virtualhosts
-nginx:          false
+nginx:          null
 nginx_root:     null
 nginx_host:     "{{ project }}.dev"
 nginx_path:     "/etc/nginx/conf.d"
@@ -45,19 +45,19 @@ nginx_fastcgi:  "/var/run/php/php5.6-fpm.sock"
 nginx_template: "default"
 
 # Handle FuelPHP projects
-fuelphp:          false
+fuelphp:          null
 fuelphp_base_url: "null"
 
 # Handle Laravel projects
-laravel:         false
+laravel:         null
 laravel_key:     false
 laravel_migrate: false
 laravel_seed:    false
 
 # Handle Prestashop projects
-prestashop:           false
+prestashop:           null
 prestashop_configurl: false
 prestashop_shopurl:   false
 
 # Handle Wordpress projects
-wordpress: false
+wordpress: null

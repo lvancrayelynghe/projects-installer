@@ -7,13 +7,13 @@
     - "{{ projects_path | mandatory }}/{{ project | mandatory }}.yml"
   roles:
     - prepare-values
-    - git
-    - desk
-    - composer
-    - npm
-    - mysql
-    - nginx
-    - fuelphp
-    - laravel
-    - prestashop
-    - wordpress
+    - { role: git, when: git != "" }
+    - { role: desk, when: desk != "" }
+    - { role: composer, when: composer != "" }
+    - { role: npm, when: npm != "" }
+    - { role: mysql, when: mysql != "" }
+    - { role: nginx, when: nginx != "" }
+    - { role: fuelphp, when: fuelphp != "" }
+    - { role: laravel, when: laravel != "" }
+    - { role: prestashop, when: prestashop != "" }
+    - { role: wordpress, when: wordpress != "" }
