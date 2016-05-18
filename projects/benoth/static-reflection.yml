@@ -1,0 +1,5 @@
+---
+
+name:  "Static Reflection library compatible with PHP native Reflection"
+desk:  true
+composer: true

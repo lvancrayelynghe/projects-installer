@@ -1,4 +1,5 @@
 ---
 
 name:  "Simple CSS Sprites generator"
+desk:  true
 composer: true
